@@ -17,6 +17,7 @@
  * Define Global Variables
  * 
 */
+var sections = document.getElementsByTagName("section");
 
 
 /**
@@ -24,7 +25,10 @@
  * Start Helper Functions
  * 
 */
-
+function isOnScreen(element) {
+    return element.getBoundingClientRect().top > 0 && 
+    element.getBoundingClientRect().top < window.innerHeight;
+}
 
 
 /**
@@ -38,6 +42,7 @@ document.addEventListener("DOMContentLoaded", buildNavBar);
 
 
 // Add class 'active' to section when near top of viewport
+document.addEventListener("scroll", setActiveSection);
 
 
 // Scroll to anchor ID using scrollTO event
@@ -51,13 +56,12 @@ document.addEventListener("DOMContentLoaded", buildNavBar);
 
 // Build menu 
 function buildNavBar() {
-    var sections = document.getElementsByTagName("section");
     const navBarFragment = document.createDocumentFragment();
     for (const section of sections) {
-        var section_link = document.createElement("li");
-        section_link.textContent = section.dataset.nav;
-        section_link.className = "menu__link";
-        navBarFragment.appendChild(section_link);
+        var sectionLink = document.createElement("li");
+        sectionLink.textContent = section.dataset.nav;
+        sectionLink.className = "menu__link";
+        navBarFragment.appendChild(sectionLink);
     }
 
     var navBarList = document.getElementById("navbar__list");
@@ -67,5 +71,15 @@ function buildNavBar() {
 // Scroll to section on link click
 
 // Set sections as active
+function setActiveSection() {
+    var sectionsOnScreen = Array.from(sections).filter(isOnScreen);
+    sectionsOnScreen.sort((element1, element2) => {
+        return element1.getBoundingClientRect().top - element2.getBoundingClientRect().top;
+    });
+    for (var section of document.getElementsByClassName("your-active-class")) {
+        section.classList.remove("your-active-class");
+    }
+    sectionsOnScreen[0].classList.add("your-active-class");
+}
 
 

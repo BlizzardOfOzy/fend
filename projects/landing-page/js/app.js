@@ -52,13 +52,16 @@ document.addEventListener("DOMContentLoaded", buildNavBar);
 // Build menu 
 function buildNavBar() {
     var sections = document.getElementsByTagName("section");
-    var navBarList = document.getElementById("navbar__list");
+    const navBarFragment = document.createDocumentFragment();
     for (const section of sections) {
         var section_link = document.createElement("li");
         section_link.textContent = section.dataset.nav;
         section_link.className = "menu__link";
-        navBarList.appendChild(section_link);
+        navBarFragment.appendChild(section_link);
     }
+
+    var navBarList = document.getElementById("navbar__list");
+    navBarList.appendChild(navBarFragment);
 }
 
 // Scroll to section on link click

@@ -58,14 +58,18 @@ navBarList.addEventListener("click", scrollToSection);
 
 // Build menu 
 function buildNavBar() {
+    // Fragment so we only need to re-render once
     const navBarFragment = document.createDocumentFragment();
     for (const section of sections) {
         let listItem = document.createElement("li");
 
         let sectionLink = document.createElement("a");
+        // Href for accessibility, though we replace the link with a scroll action
         sectionLink.href = "#" + section.id;
+        // Data attr for easy access
         sectionLink.setAttribute("data-section-id", section.id);
         sectionLink.textContent = section.dataset.nav;
+        // For css styling
         sectionLink.className = "menu__link";
         listItem.appendChild(sectionLink);
         navBarFragment.appendChild(listItem);
@@ -83,12 +87,15 @@ function scrollToSection(event) {
 // Set sections as active
 function setActiveSection() {
     let sectionsOnScreen = Array.from(sections).filter(isOnScreen);
+    // Sort by position
     sectionsOnScreen.sort((element1, element2) => {
         return element1.getBoundingClientRect().top - element2.getBoundingClientRect().top;
     });
+    // Drop all existing active sections
     for (let section of document.getElementsByClassName("your-active-class")) {
         section.classList.remove("your-active-class");
     }
+    // Set current active section
     if (sectionsOnScreen.length > 0) {
         sectionsOnScreen[0].classList.add("your-active-class");
     }

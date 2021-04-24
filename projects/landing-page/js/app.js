@@ -26,7 +26,7 @@ var sections = document.getElementsByTagName("section");
  * 
 */
 function isOnScreen(element) {
-    return element.getBoundingClientRect().top > 0 && 
+    return element.getBoundingClientRect().top >= 0 && 
     element.getBoundingClientRect().top < window.innerHeight;
 }
 
@@ -38,7 +38,7 @@ function isOnScreen(element) {
 */
 
 // build the nav
-document.addEventListener("DOMContentLoaded", buildNavBar);
+buildNavBar();
 
 
 // Add class 'active' to section when near top of viewport
@@ -58,10 +58,17 @@ document.addEventListener("scroll", setActiveSection);
 function buildNavBar() {
     const navBarFragment = document.createDocumentFragment();
     for (const section of sections) {
-        var sectionLink = document.createElement("li");
+        var listItem = document.createElement("li");
+
+        var sectionLink = document.createElement("a");
+        sectionLink.href = "#" + section.id;
+        sectionLink.setAttribute("data-section-id", section.id);
         sectionLink.textContent = section.dataset.nav;
         sectionLink.className = "menu__link";
-        navBarFragment.appendChild(sectionLink);
+        listItem.appendChild(sectionLink);
+        navBarFragment.appendChild(listItem);
+
+        sectionLink.addEventListener("click", scrollToSection);
     }
 
     var navBarList = document.getElementById("navbar__list");
@@ -69,6 +76,10 @@ function buildNavBar() {
 }
 
 // Scroll to section on link click
+function scrollToSection(event) {
+    event.preventDefault();
+    document.getElementById(event.target.getAttribute("data-section-id")).scrollIntoView();
+}
 
 // Set sections as active
 function setActiveSection() {
@@ -79,7 +90,7 @@ function setActiveSection() {
     for (var section of document.getElementsByClassName("your-active-class")) {
         section.classList.remove("your-active-class");
     }
-    sectionsOnScreen[0].classList.add("your-active-class");
+    if (sectionsOnScreen.length > 0) {
+        sectionsOnScreen[0].classList.add("your-active-class");
+    }
 }
-
-

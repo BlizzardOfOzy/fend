@@ -82,6 +82,10 @@ function buildNavBar() {
 function scrollToSection(event) {
     event.preventDefault();
     document.getElementById(event.target.getAttribute("data-section-id")).scrollIntoView();
+    for (let link of navBarList.getElementsByClassName("menu__link")) {
+        link.classList.remove("active");
+    }
+    event.target.classList.add("active");
 }
 
 // Set sections as active

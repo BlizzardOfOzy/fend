@@ -81,7 +81,7 @@ function buildNavBar() {
 // Scroll to section on link click
 function scrollToSection(event) {
     event.preventDefault();
-    document.getElementById(event.target.getAttribute("data-section-id")).scrollIntoView();
+    document.getElementById(event.target.getAttribute("data-section-id")).scrollIntoView({behavior: "smooth"});
     for (let link of navBarList.getElementsByClassName("menu__link")) {
         link.classList.remove("active");
     }
